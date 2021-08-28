@@ -51,15 +51,12 @@ public class UsuarioController {
 
     }
 
-
-
-
     /*@RequestMapping(value = "/usuario", method = RequestMethod.GET)
     public ResponseEntity<?> getAll() {
         return new ResponseEntity(usuarioRepository.findAll(), HttpStatus.OK);
     }*/
 
-    @GetMapping
+    @GetMapping/*Traer Todos*/
     public ResponseEntity<?> traerTodos(){
 
         return new ResponseEntity<>(usuarioRepository.findAll(), HttpStatus.OK);
