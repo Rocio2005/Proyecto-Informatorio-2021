@@ -7,6 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
@@ -56,10 +61,41 @@ public class UsuarioController {
         return new ResponseEntity(usuarioRepository.findAll(), HttpStatus.OK);
     }*/
 
-    @GetMapping/*Traer Todos*/
+    @GetMapping/*TRAER TODOS LOS USUARIOS*/
     public ResponseEntity<?> traerTodos(){
 
         return new ResponseEntity<>(usuarioRepository.findAll(), HttpStatus.OK);
     }
+
+    //@GetMapping("/{ciudad}")/*CONSULTAR  USUARIOS POR CIUDAD*/
+    /*public  ResponseEntity<?> traerPorCiudad(@PathVariable String ciudad){
+
+        return new ResponseEntity<>(usuarioRepository.findByCiudadContaining(ciudad),HttpStatus.OK);
+    }*/
+
+    @GetMapping("/{fechaDeCreacion}")
+    public ResponseEntity<?> afterFechaDeCreacion(@PathVariable CharSequence fechaDeCreacion){
+
+        LocalDateTime fechaIngresada=LocalDateTime.parse(fechaDeCreacion);
+
+        List<Usuario> usuarios=usuarioRepository.findAll();
+        List<Usuario> usuarioAfter=new ArrayList<>();
+        for (Usuario usuario:usuarios){
+
+            LocalDateTime fecha=usuario.getFechaDeCreacion();
+            if (fecha.isAfter(fechaIngresada)){
+                usuarioAfter.add(usuario);
+            }
+        }
+
+        return new ResponseEntity<>(usuarioAfter,HttpStatus.OK);
+
+
+    }
+
+
+
 }
 
+/*LocalDate fech=LocalDate.of(fecha.getYear(),fecha.getMonth(),fecha.getDayOfMonth());*/
+/*LocalDate fechaIn=LocalDate.of(fechaIngresada.getYear(),fechaIngresada.getMonth(),fechaIngresada.getDayOfMonth());*/
