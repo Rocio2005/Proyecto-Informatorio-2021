@@ -20,16 +20,6 @@ public class Orden {
     @JoinColumn(name="carrito_id")
     private Carrito carrito;
 
-    /*DETALLE DE LA COMPRA
-    @ManyToOne(fetch = FetchType.LAZY)
-    Producto producto;
-    @NotBlank
-    private Integer cantidad;
-    @NotBlank
-    private BigDecimal precioUnitario;
-    @Transient
-    private BigDecimal subtotal;*/
-
     @CreationTimestamp /*¿?*/
     private LocalDateTime fechaDeCreacion;
 
@@ -55,16 +45,52 @@ public class Orden {
         return carrito;
 
     }
-    /*
-    public List<LineaDeCarrito> getDetalleDeCarrito(){
-        return getCarrito().getLineasDeCarrito();
-    }*/
-
     public void setCarrito(Carrito carrito) {
         this.carrito = carrito;
     }
 
-    /*public Producto getProducto() {
+    /*DETALLE DE LA COMPRA*/
+    public List<LineaDeCarrito> getDetalleDeCarrito(){
+        return getCarrito().getLineasDeCarrito();
+    }
+    public BigDecimal totalOrden() {
+        return getCarrito().getTotal();
+    }
+
+    public LocalDateTime getFechaDeCreacion() {
+        return fechaDeCreacion;
+    }
+
+    public void setFechaDeCreacion(LocalDateTime fechaDeCreacion) {
+        this.fechaDeCreacion = fechaDeCreacion;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+}
+/*DETALLE DE LA COMPRA
+    @ManyToOne(fetch = FetchType.LAZY)
+    Producto producto;
+    @NotBlank
+    private Integer cantidad;
+    @NotBlank
+    private BigDecimal precioUnitario;
+    @Transient
+    private BigDecimal subtotal;*/
+/*public Producto getProducto() {
         return producto;
     }
 
@@ -95,28 +121,3 @@ public class Orden {
     public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }*/
-
-    public LocalDateTime getFechaDeCreacion() {
-        return fechaDeCreacion;
-    }
-
-    public void setFechaDeCreacion(LocalDateTime fechaDeCreacion) {
-        this.fechaDeCreacion = fechaDeCreacion;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-}

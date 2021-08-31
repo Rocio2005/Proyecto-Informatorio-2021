@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,13 +22,15 @@ public class Producto {
     private String nombre;
     @NotBlank
     private String descripcion;
+    @Positive
+    private BigDecimal precioUnitario;
     @NotBlank
     private String contenido;
 
     @CreationTimestamp /*¿?*/
     private LocalDateTime fechaDeCreacion;
 
-    @NotBlank/*O @ASSERTTRUE O @ASSERTFALSE??*/
+    /*O @ASSERTTRUE O @ASSERTFALSE??*/
     private Boolean publicado;
 
     public Long getId() {
@@ -51,6 +55,14 @@ public class Producto {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public BigDecimal getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
+        this.precioUnitario = precioUnitario;
     }
 
     public String getContenido() {

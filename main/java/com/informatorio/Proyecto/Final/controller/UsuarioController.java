@@ -28,11 +28,6 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioRepository.save(usuario), HttpStatus.CREATED);/*codigo 201*/
     }
 
-    /*@RequestMapping(value = "/usuario/{id}", method = RequestMethod.DELETE)
-    public void borrarPorId(@PathVariable("id") Long id) {
-        usuarioRepository.deleteById(id);
-    }*/
-
     @DeleteMapping(value = "/usuario/{id}")/*BAJA USUARIO*/
     public ResponseEntity<?> borrarUsuario(@PathVariable Long id){
         usuarioRepository.deleteById(id);
@@ -56,10 +51,6 @@ public class UsuarioController {
 
     }
 
-    /*@RequestMapping(value = "/usuario", method = RequestMethod.GET)
-    public ResponseEntity<?> getAll() {
-        return new ResponseEntity(usuarioRepository.findAll(), HttpStatus.OK);
-    }*/
 
     @GetMapping/*TRAER TODOS LOS USUARIOS*/
     public ResponseEntity<?> traerTodos(){
@@ -67,13 +58,14 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioRepository.findAll(), HttpStatus.OK);
     }
 
-    //@GetMapping("/{ciudad}")/*CONSULTAR  USUARIOS POR CIUDAD*/
-    /*public  ResponseEntity<?> traerPorCiudad(@PathVariable String ciudad){
+    @GetMapping("/{ciudad}")/*CONSULTAR  USUARIOS POR CIUDAD*/
+    public  ResponseEntity<?> traerPorCiudad(@PathVariable String ciudad){
 
         return new ResponseEntity<>(usuarioRepository.findByCiudadContaining(ciudad),HttpStatus.OK);
-    }*/
+    }
 
-    @GetMapping("/{fechaDeCreacion}")
+
+    @GetMapping("/{fechaDeCreacion}")/*OBTENER USUARIOS CREADOS LUEGO DE UNA FECHA*/
     public ResponseEntity<?> afterFechaDeCreacion(@PathVariable CharSequence fechaDeCreacion){
 
         LocalDateTime fechaIngresada=LocalDateTime.parse(fechaDeCreacion);
@@ -99,3 +91,14 @@ public class UsuarioController {
 
 /*LocalDate fech=LocalDate.of(fecha.getYear(),fecha.getMonth(),fecha.getDayOfMonth());*/
 /*LocalDate fechaIn=LocalDate.of(fechaIngresada.getYear(),fechaIngresada.getMonth(),fechaIngresada.getDayOfMonth());*/
+
+/*@RequestMapping(value = "/usuario/{id}", method = RequestMethod.DELETE)
+    public void borrarPorId(@PathVariable("id") Long id) {
+        usuarioRepository.deleteById(id);
+    }*/
+
+/*@RequestMapping(value = "/usuario", method = RequestMethod.GET)
+    public ResponseEntity<?> getAll() {
+        return new ResponseEntity(usuarioRepository.findAll(), HttpStatus.OK);
+    }*/
+

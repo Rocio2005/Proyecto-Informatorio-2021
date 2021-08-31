@@ -18,8 +18,6 @@ public class LineaDeCarrito {/*DETALLE*/
 
     @NotBlank
     private Integer cantidad;
-    @NotBlank
-    private BigDecimal precioUnitario;
 
     @Transient
     private BigDecimal subtotal;
@@ -56,16 +54,8 @@ public class LineaDeCarrito {/*DETALLE*/
         this.cantidad = cantidad;
     }
 
-    public BigDecimal getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
     public BigDecimal getSubtotal() {
-        return getPrecioUnitario().multiply(BigDecimal.valueOf(getCantidad()));//multiplicar un bigdecimal por un entero
+        return getProducto().getPrecioUnitario().multiply(BigDecimal.valueOf(getCantidad()));//multiplicar un bigdecimal por un entero
     }
 
     public void setSubtotal(BigDecimal subtotal) {
