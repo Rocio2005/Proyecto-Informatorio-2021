@@ -58,7 +58,7 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioRepository.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{ciudad}")/*CONSULTAR  USUARIOS POR CIUDAD*/
+    @GetMapping("/usuario/{ciudad}")/*CONSULTAR  USUARIOS POR CIUDAD*/
     public  ResponseEntity<?> traerPorCiudad(@PathVariable String ciudad){
 
         return new ResponseEntity<>(usuarioRepository.findByCiudadContaining(ciudad),HttpStatus.OK);
