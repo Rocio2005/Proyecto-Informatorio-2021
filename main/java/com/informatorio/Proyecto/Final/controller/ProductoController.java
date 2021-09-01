@@ -45,5 +45,22 @@ public class ProductoController {
         return new ResponseEntity<>("Producto " +id+" Modificado",HttpStatus.OK);
 
     }
+
+    @GetMapping/*TRAER TODOS LOS PRODUCTOS*/
+    public ResponseEntity<?> traerTodos(){
+
+        return new ResponseEntity<>(productoRepository.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/palabra")/*TRAER PRODUCTOS CON NOMBRES QUE INCLUYE LA PALABRA INGRESADA*/
+    public ResponseEntity<?> nameIgualA(@RequestParam("word") String word){
+        return new ResponseEntity<>(productoRepository.findByNombreContains(word),HttpStatus.OK);
+
+    }
+
+    @GetMapping("/publicados")
+    public ResponseEntity<?> traerPublicados(){
+        return new ResponseEntity<>(productoRepository.findByPublicadoTrue(),HttpStatus.OK);
+    }
 }
 
