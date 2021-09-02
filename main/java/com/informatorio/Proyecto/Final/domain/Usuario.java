@@ -112,4 +112,12 @@ public class Usuario {
     public void setPais(String pais) {
         this.pais = pais;
     }
+
+    public List<Carrito> getCarritos() {
+        return carritos;
+    }
+
+    public void setCarritos(List<Carrito> carritos) {
+        this.carritos = carritos;
+    }
 }
