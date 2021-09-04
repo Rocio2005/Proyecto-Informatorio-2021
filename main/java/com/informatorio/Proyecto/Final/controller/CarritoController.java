@@ -62,14 +62,14 @@ public class CarritoController {
         //la operacion carrito me envia el producto que solicito en el body del Postman
         Carrito carrito = carritoRepository.getById(idCarrito);//Traigo el carrito que quiero cargar
 
-        for (LineaDeCarrito lineaDeCarrito : carrito.getLineasDeCarrito()) {
-            boolean exist = operacionCarrito.getProductoId().equals(lineaDeCarrito.getProducto().getId());
+        //for (LineaDeCarrito lineaDeCarrito : carrito.getLineasDeCarrito()) {
+            //boolean exist = operacionCarrito.getProductoId().equals(lineaDeCarrito.getProducto().getId());
             //si existe no hago nada,sobrescribo el valor de la cantidad o lo piso¿?
             //lineaDeCarrito.setCantidad(operacionCarrito.getCantidad());
 
             // o sino acumulo
-            lineaDeCarrito.setCantidad(lineaDeCarrito.getCantidad() + operacionCarrito.getCantidad());
-        } //no se porque se repite en POSTMAN
+            //lineaDeCarrito.setCantidad(lineaDeCarrito.getCantidad() + operacionCarrito.getCantidad());
+        //} //no se porque se repite en POSTMAN
 
         Producto producto = productoRepository.getById(operacionCarrito.getProductoId());//busco el producto que pase en la operación carrito
         LineaDeCarrito lineaDeCarrito = new LineaDeCarrito();

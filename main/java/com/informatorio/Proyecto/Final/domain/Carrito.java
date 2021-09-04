@@ -37,7 +37,7 @@ public class Carrito {
     @Transient
     private BigDecimal total;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)/*un carrito para muchos detalles(lineasdecarrito)*/
     private List<LineaDeCarrito> lineasDeCarrito = new ArrayList<>();
 
