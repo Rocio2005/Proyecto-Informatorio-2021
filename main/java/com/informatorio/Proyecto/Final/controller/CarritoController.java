@@ -1,7 +1,10 @@
 package com.informatorio.Proyecto.Final.controller;
 
 import com.informatorio.Proyecto.Final.domain.Carrito;
+import com.informatorio.Proyecto.Final.domain.LineaDeCarrito;
+import com.informatorio.Proyecto.Final.domain.Producto;
 import com.informatorio.Proyecto.Final.domain.Usuario;
+import com.informatorio.Proyecto.Final.dto.OperacionCarrito;
 import com.informatorio.Proyecto.Final.repository.CarritoRepository;
 import com.informatorio.Proyecto.Final.repository.ProductoRepository;
 import com.informatorio.Proyecto.Final.repository.UsuarioRepository;
@@ -48,61 +51,66 @@ public class CarritoController {
             return new ResponseEntity<>("EL CARRITO " + carritoId + " NO LE PERTENECE AL USUARIO " + userId, HttpStatus.OK);
         }
     }
+    /*si quiero borrar todos los carritos del usuario necesito traer el metodo getcarritos
+     * y recorrer esa lista para eliminar todos */
 
-}
 
+    @PutMapping("/usuario/{id}/carrito/{idCarrito}/productos")
+    //agregar producto al carrito del usuario tal a su carrito tanto
+    public ResponseEntity<?> agregarProducto(@PathVariable("id") Long userId, @PathVariable("idCarrito") Long idCarrito,
+                                             @Valid @RequestBody OperacionCarrito operacionCarrito) {
+        //la operacion carrito me envia el producto que solicito en el body del Postman
+        Carrito carrito = carritoRepository.getById(idCarrito);//Traigo el carrito que quiero cargar
 
-    /*@PutMapping("/usuario/{id}/carrito/{idCarrito}/=?")//agregar indumentaria al carrito del usuario tal a su carrito tanto
-    public ResponseEntity<?> agregarIndumentaria(@PathVariable("id") Long userId,@PathVariable("idCarrito") Long idCarrito,
-                                                 @Valid @RequestBody OperacionCarrito operacionCarrito) {
-        //la operacion carrito me envia un producto
-        Carrito carrito=carritoRepository.getById(idCarrito);
-
-        /*for (LineaDeCarrito lineaDeCarrito:carrito.getLineasDeCarrito()){
-            boolean exist=operacionCarrito.getIndumentariaId().equals(lineaDeCarrito.getIndumentaria().getId());
+        for (LineaDeCarrito lineaDeCarrito : carrito.getLineasDeCarrito()) {
+            boolean exist = operacionCarrito.getProductoId().equals(lineaDeCarrito.getProducto().getId());
             //si existe no hago nada,sobrescribo el valor de la cantidad o lo piso¿?
-            lineaDeCarrito.setCantidad(operacionCarrito.getCantidad());
+            //lineaDeCarrito.setCantidad(operacionCarrito.getCantidad());
 
             // o sino acumulo
-            lineaDeCarrito.setCantidad(lineaDeCarrito.getCantidad()+ operacionCarrito.getCantidad());
-        }*///no se porque se repite en POSTMAN
+            lineaDeCarrito.setCantidad(lineaDeCarrito.getCantidad() + operacionCarrito.getCantidad());
+        } //no se porque se repite en POSTMAN
 
-       /* Indumentaria indumentaria= indumentariaRepository.getById(operacionCarrito.getIndumentariaId());//busco el producto que pase en la operación carrito
-        LineaDeCarrito lineaDeCarrito=new LineaDeCarrito();//creo el detalle del producto
-        lineaDeCarrito.setCarrito(carrito);
-        lineaDeCarrito.setIndumentaria(indumentaria);
-        lineaDeCarrito.setCantidad(operacionCarrito.getCantidad());
+        Producto producto = productoRepository.getById(operacionCarrito.getProductoId());//busco el producto que pase en la operación carrito
+        LineaDeCarrito lineaDeCarrito = new LineaDeCarrito();
+        //creo el detalle del producto(seteando cantidad,producto y el carrito correspondiente)
+        lineaDeCarrito.setCarrito(carrito);//le agrego esta linea al carrito creado antes
+        lineaDeCarrito.setProducto(producto);//le agrego el producto que traje del repositorio
+        lineaDeCarrito.setCantidad(operacionCarrito.getCantidad());//le agrego la cantidad
         carrito.agregarLineaDeCarrito(lineaDeCarrito);
-        return new ResponseEntity<>(carritoRepository.save(carrito), HttpStatus.CREATED);
+        return new ResponseEntity<>(carritoRepository.save(carrito), HttpStatus.OK);
     }
 
-    @DeleteMapping("/usuario/{id}/carrito/{idCarrito}/linea/{idLinea}")//linea o descripcion o detalle o producto
-    public ResponseEntity<?> borrarLinea(@PathVariable("id") Long userId,@PathVariable("idCarrito") Long idCarrito,
-                                         @PathVariable("idLinea") Long id,
-                                         @PathVariable("idIndumentaria")
-                                         @Valid @RequestBody OperacionCarrito operacionCarrito){
-        Carrito carrito=carritoRepository.getById(idCarrito);//busca mi carrito(el que le pedi en la request) en la base de datos
-        Indumentaria indumentaria=indumentariaRepository.getById(operacionCarrito.getIndumentariaId());//obtengo mi producto por la id que le pase
-        LineaDeCarrito lineaDeCarrito=new LineaDeCarrito();//creo una linea para llamar al detalle del producto anterior
-        //le paso a linea de carrito los datos necesarios para crear el detalle de esa indumentaria de mi carrito
-        lineaDeCarrito.setCarrito(carrito);
-        lineaDeCarrito.setIndumentaria(indumentaria);
-        lineaDeCarrito.setCantidad(operacionCarrito.getCantidad());
-        carrito.removerLineaDeCarrito(lineaDeCarrito);
-        return new ResponseEntity<>(carritoRepository.save(carrito),HttpStatus.ACCEPTED);
+
+    @DeleteMapping("/usuario/{id}/carrito/{idCarrito}/linea/{idLinea}")//Borrar linea o descripcion o detalle o producto a borrar
+    public ResponseEntity<?> borrarLinea(@PathVariable("id") Long userId, @PathVariable("idCarrito") Long idCarrito,
+                                         @PathVariable("idLinea") Long idLinea) {
+        Carrito carrito = carritoRepository.getById(idCarrito);//busca mi carrito(el que le pedi en la request) en la base de datos
+        for (LineaDeCarrito linea:carrito.getLineasDeCarrito()){
+            if (linea.getId().equals(idLinea)){
+                carrito.removerLineaDeCarrito(linea);
+            }
+        }
+        return new ResponseEntity<>("linea "+idLinea+" borrada "+"del carrito "+idCarrito, HttpStatus.OK);
 
     }
 
-    @PutMapping("/{id}")/*MODIFICAR USUARIO*/
-   /* public ResponseEntity<?>  modificarUsuario(@PathVariable Long id,@RequestBody Usuario usuario){
-        Usuario usuarioAmodificar=usuarioRepository.findById(id).get();
+    @GetMapping("/usuario/{id}/carritos")//MOSTRAR CARRITOS DE UN USUARIO
+    public ResponseEntity <?> mostrarTodosCarritos(@PathVariable("id") Long userId){
+        Usuario usuario=usuarioRepository.getById(userId);
+        return new ResponseEntity<>(usuario.getCarritos(),HttpStatus.OK);
+    }
 
-        usuarioAmodificar.setNombre(usuario.getNombre());
-        usuarioAmodificar.setApellido(usuario.getApellido());
+    @GetMapping("/usuario/{id}/carritoactual/{idCarrito}")//Mostrar detalle del carrito actual
+    public ResponseEntity<?> detalleCarrito(@PathVariable("id") Long userId,@PathVariable("idCarrito") Long idCarrito){
+        Usuario usuario=usuarioRepository.getById(userId);
+        Carrito carrito=carritoRepository.getById(idCarrito);
+        if (carrito.isEstado()){
 
+            return new ResponseEntity<>(carrito.getLineasDeCarrito(),HttpStatus.OK);
+        }
+        else return new ResponseEntity<>("EL CARRITO NO ES EL ACTUAL",HttpStatus.OK);
 
-        usuarioRepository.save(usuarioAmodificar);
+    }
 
-        return new ResponseEntity<>("usuario modificado",HttpStatus.OK);
-
-    }*/
+}

@@ -1,6 +1,8 @@
 package com.informatorio.Proyecto.Final.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -24,14 +26,18 @@ public class Carrito {
     @CreationTimestamp /*¿?*/
     private LocalDateTime fechaDeCreacion;
 
+    private boolean estado;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)/*varios carritos para un usuario*/
     private Usuario usuario;
 
+    @JsonIgnore
     @Positive
     @Transient
     private BigDecimal total;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)/*un carrito para muchos detalles(lineasdecarrito)*/
     private List<LineaDeCarrito> lineasDeCarrito = new ArrayList<>();
 
@@ -81,11 +87,31 @@ public class Carrito {
         this.total = total;
     }
 
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    //@JsonManagedReference
     public List<LineaDeCarrito> getLineasDeCarrito() {
         return lineasDeCarrito;
     }
 
     public void setLineasDeCarrito(List<LineaDeCarrito> lineasDeCarrito) {
+
         this.lineasDeCarrito = lineasDeCarrito;
+    }
+
+    public void agregarLineaDeCarrito(LineaDeCarrito lineaDeCarrito) {
+        lineasDeCarrito.add(lineaDeCarrito);
+        lineaDeCarrito.setCarrito(this);
+    }
+
+    public void removerLineaDeCarrito(LineaDeCarrito lineaDeCarrito) {
+        lineasDeCarrito.remove(lineaDeCarrito);
+        lineaDeCarrito.setCarrito(null);
     }
 }

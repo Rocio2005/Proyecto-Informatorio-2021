@@ -1,7 +1,12 @@
 package com.informatorio.Proyecto.Final.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 @Entity
@@ -10,13 +15,14 @@ public class LineaDeCarrito {/*DETALLE*/
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     Carrito carrito;
 
     @ManyToOne(fetch = FetchType.LAZY)
     Producto producto;
 
-    @NotBlank
+    @Positive
     private Integer cantidad;
 
     @Transient
@@ -30,6 +36,8 @@ public class LineaDeCarrito {/*DETALLE*/
         this.id = id;
     }
 
+    //@JsonBackReference
+    //@JsonIgnore
     public Carrito getCarrito() {
         return carrito;
     }

@@ -1,5 +1,6 @@
 package com.informatorio.Proyecto.Final.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.informatorio.Proyecto.Final.util.ValidationHelper;
 import org.hibernate.annotations.CreationTimestamp;
 
