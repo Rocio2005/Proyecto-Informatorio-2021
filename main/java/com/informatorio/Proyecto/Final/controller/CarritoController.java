@@ -16,6 +16,7 @@ import javax.validation.Valid;
 
 @RestController
 public class CarritoController {
+    //Traigo los repositorios
 
     private final UsuarioRepository usuarioRepository;
     private final CarritoRepository carritoRepository;
